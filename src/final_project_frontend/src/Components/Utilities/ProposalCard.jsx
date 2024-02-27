@@ -3,6 +3,7 @@ import Card from "./Card";
 import editIcon from "../../../assets/edit.png";
 import EditInput from "./EditInput";
 import confirmIcon from "../../../assets/confrim.png";
+import {final_project_backend} from "../../../../declarations/final_project_backend";
 // import Loader from "./Loader";
 const ProposalCard = ({ proposal, proposalCount }) => {
     const [loading, setLoading] = useState(true);
@@ -13,6 +14,7 @@ const ProposalCard = ({ proposal, proposalCount }) => {
 
     useEffect(() => {
         if (proposal) {
+            console.log(proposal)
             setLoading(false);
         }
     }, [proposal]);
@@ -82,22 +84,27 @@ const ProposalCard = ({ proposal, proposalCount }) => {
         handleChoice();
         setVoting(true);
         console.log(userChoice);
-        //Actual voting request to backend
+        const vote = await final_project_backend.vote(proposalCount,userChoice);
+        console.log(vote)
         window.location.reload();
         setVoting(false);
     };
 
     const handleEndProposal = async () => {
         setEndingProposal(true);
-        //Actual end proposal request to backend
+        await final_project_backend.end_proposal(proposalCount);
         setEndingProposal(false);
         window.location.reload();
     };
 
     const editProposal = async (count) => {
         editInput !== "" &&
-            //Actual edit proposal request to backend
-            setEditMode(false);
+        (await final_project_backend.edit_proposal(proposalCount, {
+            description:editInput,
+            is_active:proposal[0]?.is_active,
+        }))
+        console.log("edited")
+        setEditMode(false);
     };
 
     const handleEditMode = () => {
@@ -109,7 +116,6 @@ const ProposalCard = ({ proposal, proposalCount }) => {
         setEditInput(e.target.value);
     };
 
-    console.log(proposalCount);
 
     return (
         <Card cardStyle={customCard}>
@@ -147,7 +153,7 @@ const ProposalCard = ({ proposal, proposalCount }) => {
                     Approve:{" "}
                     <span className={approveStyle}>
                         {proposal && proposal[0]?.approve}{" "}
-                        {proposal && proposal[0].is_active && (
+                        {proposal && proposal[0]?.is_active && (
                             <span
                                 onClick={async () => await handleVote(1)}
                                 className={approveVoteStyle}
@@ -161,7 +167,7 @@ const ProposalCard = ({ proposal, proposalCount }) => {
                     Reject:{" "}
                     <span className={rejectStyle}>
                         {proposal && proposal[0]?.reject}{" "}
-                        {proposal && proposal[0].is_active && (
+                        {proposal && proposal[0]?.is_active && (
                             <span
                                 onClick={async () => await handleVote(2)}
                                 className={rejectVoteStyle}
@@ -175,7 +181,7 @@ const ProposalCard = ({ proposal, proposalCount }) => {
                     Pass:{" "}
                     <span className={passStyle}>
                         {proposal && proposal[0]?.pass}{" "}
-                        {proposal && proposal[0].is_active && (
+                        {proposal && proposal[0]?.is_active && (
                             <span
                                 onClick={async () => await handleVote(3)}
                                 className={passVoteStyle}
@@ -193,7 +199,7 @@ const ProposalCard = ({ proposal, proposalCount }) => {
                 </div>
             </div>
             <div className={endProposalStyle}>
-                {proposal[0].is_active ? (
+                {proposal[0]?.is_active ? (
                     <div
                         onClick={handleEndProposal}
                         className="hover:text-[#ff0054]"

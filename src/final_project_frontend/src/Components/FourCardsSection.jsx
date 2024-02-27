@@ -15,7 +15,7 @@ const FourCardsSection = ({ proposalList }) => {
             {proposals?.reverse().map((item, index) => (
                 <div key={index} className="">
                     <ProposalListItems
-                        index={proposals.length - 1 - index}
+                        index={proposals?.length - 1 - index}
                         proposal={item}
                     />
                 </div>

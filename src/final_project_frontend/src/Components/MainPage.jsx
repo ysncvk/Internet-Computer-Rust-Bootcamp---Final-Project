@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import NavBar from "./NavBar";
 import bgImg from "../../assets/700.jpg";
+import HeroSection from "./HeroSection";
+import RoundProfileSection from "./RoundProfileSection";
 
 const MainPage = () => {
     const [currentProposal, setCurrentProposal] = useState();
@@ -33,18 +35,18 @@ const MainPage = () => {
                 }}
             >
                 <NavBar />
-                {/* {currentProposal && (
+               {currentProposal && (
                     <HeroSection
                         proposalCount={proposalCount}
                         currentProposal={currentProposal}
                     />
-                )} */}
+                )}
                 <div className={inputSectionStyle}>
-                    {/* <RoundProfileSection
+                     <RoundProfileSection
                         proposalList={proposalList}
                         currentProposal={currentProposal}
                         proposalCount={proposalCount}
-                    /> */}
+                    />
                 </div>
                 <div className={proposalListStyle}>
                     {/* Map Proposal list */}

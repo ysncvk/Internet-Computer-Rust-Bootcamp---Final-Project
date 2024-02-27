@@ -29,7 +29,7 @@ const NavBar = ({ getShowProposal }) => {
                         onClick={() => setShowProposal(false)}
                         className={navBarText + underlineStyle}
                     >
-                        ChainCortex
+                        ICP Boundy
                     </div>
                 </div>
             </div>

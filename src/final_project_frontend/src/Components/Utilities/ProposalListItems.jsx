@@ -34,15 +34,15 @@ const ProposalListItems = ({ proposal, index, proposalListLength }) => {
 
     // Calculate total votes and percentages
     const totalVotes = proposal
-        ? proposal[0].approve + proposal[0].reject + proposal[0].pass
+        ? proposal[0]?.approve + proposal[0]?.reject + proposal[0]?.pass
         : 0;
     const approvePercent = proposal
-        ? (proposal[0].approve / totalVotes) * 100
+        ? (proposal[0]?.approve / totalVotes) * 100
         : 0;
     const rejectPercent = proposal
-        ? (proposal[0].reject / totalVotes) * 100
+        ? (proposal[0]?.reject / totalVotes) * 100
         : 0;
-    const passPercent = proposal ? (proposal[0].pass / totalVotes) * 100 : 0;
+    const passPercent = proposal ? (proposal[0]?.pass / totalVotes) * 100 : 0;
 
     // Vote bar styles
     const voteBarStyle = {
@@ -145,8 +145,8 @@ const ProposalListItems = ({ proposal, index, proposalListLength }) => {
                         <div>
                             Approve:{" "}
                             <span className={approveStyle}>
-                                {proposal[0].approve}{" "}
-                                {proposal[0].is_active && (
+                                {proposal[0]?.approve}{" "}
+                                {proposal[0]?.is_active && (
                                     <span
                                         onClick={async () =>
                                             await handleVote(1)
@@ -161,8 +161,8 @@ const ProposalListItems = ({ proposal, index, proposalListLength }) => {
                         <span>
                             Reject:{" "}
                             <span className={rejectStyle}>
-                                {proposal[0].reject}{" "}
-                                {proposal[0].is_active && (
+                                {proposal[0]?.reject}{" "}
+                                {proposal[0]?.is_active && (
                                     <span
                                         onClick={async () =>
                                             await handleVote(2)
@@ -177,8 +177,8 @@ const ProposalListItems = ({ proposal, index, proposalListLength }) => {
                         <span>
                             Pass:{" "}
                             <span className={passStyle}>
-                                {proposal[0].pass}{" "}
-                                {proposal[0].is_active && (
+                                {proposal[0]?.pass}{" "}
+                                {proposal[0]?.is_active && (
                                     <span
                                         onClick={async () =>
                                             await handleVote(3)
@@ -199,7 +199,7 @@ const ProposalListItems = ({ proposal, index, proposalListLength }) => {
                     </div>
                 )}
                 <div className={endProposalStyle}>
-                    {proposal[0].is_active ? (
+                    {proposal[0]?.is_active ? (
                         <div
                             onClick={handleEndProposal}
                             className="hover:text-[#ff0054]"

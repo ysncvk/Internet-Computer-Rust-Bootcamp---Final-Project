@@ -3,15 +3,43 @@ import NavBar from "./NavBar";
 import bgImg from "../../assets/700.jpg";
 import HeroSection from "./HeroSection";
 import RoundProfileSection from "./RoundProfileSection";
+import {final_project_backend} from "../../../declarations/final_project_backend";
+import ProposalListItems from "./Utilities/ProposalListItems";
 
 const MainPage = () => {
-    const [currentProposal, setCurrentProposal] = useState();
+    const [currentProposal, setCurrentProposal] = useState([]);
     const [proposalList, setProposalList] = useState([]);
     const [proposalCount, setProposalCount] = useState(0);
 
+    // Backend Calls
+    const getCurrentProposal = async (count) => {
+        const getCurrentProposal = await final_project_backend.get_proposal(count);
+        setCurrentProposal(getCurrentProposal)
+    };
+
+    // Get Current Proposal Count Function
+    useEffect(async() => {
+        const proposalCount  = await final_project_backend.get_proposal_count();
+        setProposalCount(proposalCount);
+    }, []);
+
+    // Get Current Proposal Function
+    useEffect(() => {
+        proposalCount && getCurrentProposal(proposalCount);
+    }, [proposalCount]);
+
+
     // Get Proposal List Function
     useEffect(() => {
-        const fetchProposals = async () => {};
+        const fetchProposals = async () => {
+
+            let proposals = [];
+            for (let i = 1; i <= proposalCount; i++ ) {
+                const proposal = await final_project_backend.get_proposal(i);
+                proposals.push(proposal);
+            }
+            setProposalList(proposals);
+        };
 
         if (proposalCount > 0) {
             fetchProposals();
@@ -49,7 +77,15 @@ const MainPage = () => {
                     />
                 </div>
                 <div className={proposalListStyle}>
-                    {/* Map Proposal list */}
+                    {  proposalList.slice(0,-1).reverse().map((proposal,index)=>(
+                        <ProposalListItems
+                            proposalListLength={proposalList.length}
+                            key={index}
+                            proposal={proposal}
+                            index={index+1}
+                        />
+
+                    )) }
                 </div>
             </div>
         </div>

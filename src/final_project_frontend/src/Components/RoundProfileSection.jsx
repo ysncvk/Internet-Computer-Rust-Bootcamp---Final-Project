@@ -16,7 +16,7 @@ const RoundProfileSection = ({
         setProposal(e.target.value);
     };
     const handleProposeSend = async () => {
-        const key =proposalCount + 1; // Generate a unique key for the new proposal.
+        const key =BigInt(proposalCount) + BigInt(1); // Generate a unique key for the new proposal.
         if (proposal !== "") { // Proceed only if the proposal text is not empty.
             setLoading(true); // Indicate the start of the process.
             await final_project_backend.create_proposal(key, {

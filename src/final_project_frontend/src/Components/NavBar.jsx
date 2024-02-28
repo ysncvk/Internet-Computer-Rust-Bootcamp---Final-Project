@@ -35,10 +35,9 @@ const NavBar = ({ getShowProposal }) => {
             </div>
             <div className="flex items-center gap-x-2">
                 <div
-                    onClick={() => setShowProposal(true)}
-                    className={navBarText + underlineStyle}
+                    className={navBarText}
                 >
-                    Proposals
+                    Proposal and Voting Project
                 </div>
             </div>
         </div>

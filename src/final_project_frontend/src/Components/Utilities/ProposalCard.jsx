@@ -5,6 +5,9 @@ import deleteImage from "../../../assets/deleteImage.png";
 import EditInput from "./EditInput";
 import confirmIcon from "../../../assets/confrim.png";
 import {final_project_backend} from "../../../../declarations/final_project_backend";
+import ShadowButton from "./ShadowButton";
+import DeleteButton from "./DeleteButton";
+import CancelButton from "./CancelButton";
 // import Loader from "./Loader";
 const ProposalCard = ({ proposal, proposalCount }) => {
     const [loading, setLoading] = useState(true);
@@ -13,6 +16,7 @@ const ProposalCard = ({ proposal, proposalCount }) => {
     const [editInput, setEditInput] = useState("");
     const [endingProposal, setEndingProposal] = useState(false);
     const [deletingProposal, setDeletingProposal] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
     useEffect(() => {
         if (proposal) {
@@ -41,6 +45,7 @@ const ProposalCard = ({ proposal, proposalCount }) => {
         "text-white cursor-pointer hover:text-[#ffbd00] absolute left-[6rem]";
     const rejectVoteStyle =
         "text-white cursor-pointer hover:text-[#ff0054] absolute left-[5rem]";
+
     // Calculate total votes and percentages
     const totalVotes = proposal
         ? proposal[0]?.approve + proposal[0]?.reject + proposal[0]?.pass
@@ -129,7 +134,16 @@ const ProposalCard = ({ proposal, proposalCount }) => {
             alert("Failed to delete proposal. Please try again.");
         } finally {
             setDeletingProposal(false);
+            closeDeleteModal();
         }
+    };
+
+    const openDeleteModal = () => {
+        setIsDeleteModalOpen(true);
+    };
+
+    const closeDeleteModal = () => {
+        setIsDeleteModalOpen(false);
     };
 
 
@@ -151,28 +165,28 @@ const ProposalCard = ({ proposal, proposalCount }) => {
                         </span>
                     )}
                     <div className="flex items-center gap-2">
-                    {editMode ? (
-                        <img
-                            onClick={editProposal}
-                            className={confirmIconStyle}
-                            src={confirmIcon}
-                            alt="confirm icon"
-                        />
-                    ) : (
-                        <img
-                            onClick={handleEditMode}
-                            className={editIconStyle}
-                            src={editIcon}
-                            alt="edit icon"
-                        />
-                    )}
+                        {editMode ? (
+                            <img
+                                onClick={editProposal}
+                                className={confirmIconStyle}
+                                src={confirmIcon}
+                                alt="confirm icon"
+                            />
+                        ) : (
+                            <img
+                                onClick={handleEditMode}
+                                className={editIconStyle}
+                                src={editIcon}
+                                alt="edit icon"
+                            />
+                        )}
 
-                    <img
-                        onClick={handleDeleteProposal}
-                        className={editIconStyle} // Use a similar style for the delete icon
-                        src={deleteImage}
-                        alt="delete icon"
-                    />
+                        <img
+                            onClick={openDeleteModal}
+                            className={editIconStyle} // Use a similar style for the delete icon
+                            src={deleteImage}
+                            alt="delete icon"
+                        />
                     </div>
                 </div>
                 <span>
@@ -236,6 +250,28 @@ const ProposalCard = ({ proposal, proposalCount }) => {
                     <div className="text-[#ff0054]">Proposal is Incative</div>
                 )}
 
+            </div>
+
+            <div>
+
+
+                {isDeleteModalOpen && (
+                    <div className="fixed top-0 left-0 w-full h-full z-10 flex items-center justify-center bg-black">
+                        <div className="bg-black rounded-lg shadow-lg p-4 w-full max-w-md border">
+                            <p className="text-center text-white text-lg font-bold mb-8"> You are deleting the proposal. Are You Sure?</p>
+                            <div className="flex justify-end gap-4">
+
+                                <CancelButton
+                                    onClick={() => closeDeleteModal()}
+                                />
+                                <DeleteButton
+                                    loading={deletingProposal}
+                                    onClick={() => handleDeleteProposal()}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
         </Card>
     );

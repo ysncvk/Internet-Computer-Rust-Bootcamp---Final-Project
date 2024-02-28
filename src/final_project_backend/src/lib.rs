@@ -148,6 +148,16 @@ fn end_proposal(key: u64) -> Result<(), VoteError> {
 }
 
 #[ic_cdk::update]
+fn delete_proposal(key: u64) -> Result<(), VoteError> {
+    PROPOSAL_MAP.with(|p| {
+        match p.borrow_mut().remove(&key) {
+            Some(_) => Ok(()),
+            None => Err(VoteError::NoSuchProposal),
+        }
+    })
+}
+
+#[ic_cdk::update]
 fn vote(key: u64, choice: Choice) -> Result<(), VoteError> {
     PROPOSAL_MAP.with(|p| {
         let proposal_opt: Option<Proposal> = p.borrow().get(&key);

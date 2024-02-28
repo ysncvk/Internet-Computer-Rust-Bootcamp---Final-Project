@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Card from "./Card";
 import editIcon from "../../../assets/edit.png";
+import deleteImage from "../../../assets/deleteImage.png";
 import EditInput from "./EditInput";
 import confirmIcon from "../../../assets/confrim.png";
 import {final_project_backend} from "../../../../declarations/final_project_backend";
@@ -11,6 +12,7 @@ const ProposalCard = ({ proposal, proposalCount }) => {
     const [editMode, setEditMode] = useState(false);
     const [editInput, setEditInput] = useState("");
     const [endingProposal, setEndingProposal] = useState(false);
+    const [deletingProposal, setDeletingProposal] = useState(false);
 
     useEffect(() => {
         if (proposal) {
@@ -116,6 +118,21 @@ const ProposalCard = ({ proposal, proposalCount }) => {
         setEditInput(e.target.value);
     };
 
+    const handleDeleteProposal = async () => {
+        setDeletingProposal(true);
+        try {
+            await final_project_backend.delete_proposal(proposalCount);
+            window.location.reload();
+        } catch (error) {
+            // Handle any errors from the backend function
+            console.error("Error deleting proposal:", error);
+            alert("Failed to delete proposal. Please try again.");
+        } finally {
+            setDeletingProposal(false);
+        }
+    };
+
+
 
     return (
         <Card cardStyle={customCard}>
@@ -133,6 +150,7 @@ const ProposalCard = ({ proposal, proposalCount }) => {
                                 : "Proposal Loading..."}
                         </span>
                     )}
+                    <div className="flex items-center gap-2">
                     {editMode ? (
                         <img
                             onClick={editProposal}
@@ -148,6 +166,14 @@ const ProposalCard = ({ proposal, proposalCount }) => {
                             alt="edit icon"
                         />
                     )}
+
+                    <img
+                        onClick={handleDeleteProposal}
+                        className={editIconStyle} // Use a similar style for the delete icon
+                        src={deleteImage}
+                        alt="delete icon"
+                    />
+                    </div>
                 </div>
                 <span>
                     Approve:{" "}
@@ -209,6 +235,7 @@ const ProposalCard = ({ proposal, proposalCount }) => {
                 ) : (
                     <div className="text-[#ff0054]">Proposal is Incative</div>
                 )}
+
             </div>
         </Card>
     );
